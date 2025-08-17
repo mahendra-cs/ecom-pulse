@@ -1,0 +1,48 @@
+ecom-pulse/
+├── order-service/
+│   ├── src/main/java/com/ecompulse/order/
+│   │   ├── OrderController.java
+│   │   └── OrderService.java
+│   ├── src/main/resources/
+│   │   └── application.yml
+│   └── Dockerfile
+│
+├── inventory-service/
+│   ├── src/main/java/com/ecompulse/inventory/
+│   │   ├── PaymentController.java
+│   │   └── InventoryService.java
+│   ├── src/main/resources/
+│   │   └── application.yml
+│   └── Dockerfile
+│
+├── payment-service/
+│   ├── src/main/java/com/ecompulse/payment/
+│   │   ├── PaymentController.java
+│   │   └── PaymentService.java
+│   ├── src/main/resources/
+│   │   └── application.yml
+│   └── Dockerfile
+│
+├── monitor-app/
+│   ├── src/main/java/com/ecompulse/monitor/
+│   │   ├── MonitorApplication.java
+│   │   └── AnomalyDetector.java
+│   ├── src/main/resources/
+│   │   └── application.yml
+│   └── Dockerfile
+│
+├── prometheus/
+│   └── prometheus.yml
+│
+├── grafana/
+│   └── provisioning/
+│       ├── datasources/
+│       │   └── datasource.yml
+│       └── dashboards/
+│           └── dashboard.json
+│
+├── jmeter/
+│   └── order-test.jmx
+│
+├── docker-compose.yml
+└── README.md
