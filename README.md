@@ -64,4 +64,32 @@ To get Ecom-Pulse up and running, ensure you have Docker and Docker Compose inst
     -   Prometheus: `http://localhost:9090`
     -   Grafana: `http://localhost:3000`
 
+## Deployment to AWS EC2 using Cloud-Init
+
+For automated deployment to an AWS EC2 instance, you can leverage Cloud-Init with the provided `cloud-init-deploy.sh` script. This script automates the installation of Docker and Docker Compose, clones the repository, and starts the services.
+
+**How to use `cloud-init-deploy.sh`:**
+
+1.  **Launch an EC2 Instance:**
+    *   Choose an **Amazon Linux 2 AMI** (or a compatible Linux distribution where `yum` and `sudo` commands work as expected).
+    *   In the "Configure Instance Details" step, expand "Advanced Details".
+    *   Paste the entire content of `cloud-init-deploy.sh` into the "User data" text area.
+2.  **Configure Security Group:**
+    *   Ensure your EC2 instance's security group allows inbound traffic on the following ports:
+        *   `22` (SSH)
+        *   `8080`, `8081`, `8082` (Microservices)
+        *   `9090` (Prometheus)
+        *   `3000` (Grafana)
+3.  **Launch and Monitor:**
+    *   Launch the instance. Cloud-Init will execute the script on first boot.
+    *   Monitor the instance's system logs (via EC2 console) to track the script's progress.
+    *   Once the script completes, your services should be running and accessible via the instance's public IP on the configured ports.
+
+**Important Considerations:**
+
+*   **IAM Role:** For enhanced security, consider attaching an IAM role to your EC2 instance with minimal necessary permissions, rather than relying on SSH keys for Git cloning if your repository were private.
+*   **`docker-compose` Version:** The script installs Docker Compose version `1.29.2`. You might want to update this to the latest stable version by changing the URL in the script.
+*   **User:** The script assumes the default user is `ec2-user` for adding to the `docker` group. Adjust `usermod -a -G docker ec2-user` if your AMI uses a different default user.
+
+
 
