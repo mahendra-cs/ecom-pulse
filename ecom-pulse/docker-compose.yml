@@ -9,8 +9,8 @@ services:
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8080/actuator/health"]
       interval: 10s
-      timeout: 5s
-      retries: 5
+      timeout: 10s
+      retries: 10
 
   payment-service:
     build: ./payment-service
@@ -21,8 +21,8 @@ services:
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8082/actuator/health"]
       interval: 10s
-      timeout: 5s
-      retries: 5
+      timeout: 10s
+      retries: 10
 
   inventory-service:
     build: ./inventory-service
@@ -33,8 +33,8 @@ services:
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8081/actuator/health"]
       interval: 10s
-      timeout: 5s
-      retries: 5
+      timeout: 10s
+      retries: 10
 
   jmeter:
     build: ./jmeter
@@ -49,6 +49,21 @@ services:
         condition: service_healthy
       inventory-service:
         condition: service_healthy
+
+  jmeter-starter:
+    build: ./jmeter-starter
+    ports:
+      - "5001:5001"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./:/app
+    working_dir: /app
+    networks:
+      - ecom-pulse-network
+    depends_on:
+      - order-service
+      - payment-service
+      - inventory-service
 
   prometheus:
     image: prom/prometheus:latest

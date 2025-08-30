@@ -1,0 +1,51 @@
+jenkins:
+  systemMessage: "Jenkins configured automatically by JCasC"
+  jobs:
+    - script: >
+        pipelineJob('order-service-pipeline') {
+          definition {
+            cpsScm {
+              scm {
+                git {
+                  remote {
+                    url('https://github.com/mahendra-cs/ecom-pulse.git')
+                  }
+                  branch('*/main')
+                }
+              }
+              scriptPath('ecom-pulse/order-service/Jenkinsfile')
+            }
+          }
+        }
+    - script: >
+        pipelineJob('inventory-service-pipeline') {
+          definition {
+            cpsScm {
+              scm {
+                git {
+                  remote {
+                    url('https://github.com/mahendra-cs/ecom-pulse.git')
+                  }
+                  branch('*/main')
+                }
+              }
+              scriptPath('ecom-pulse/inventory-service/Jenkinsfile')
+            }
+          }
+        }
+    - script: >
+        pipelineJob('payment-service-pipeline') {
+          definition {
+            cpsScm {
+              scm {
+                git {
+                  remote {
+                    url('https://github.com/mahendra-cs/ecom-pulse.git')
+                  }
+                  branch('*/main')
+                }
+              }
+              scriptPath('ecom-pulse/payment-service/Jenkinsfile')
+            }
+          }
+        }

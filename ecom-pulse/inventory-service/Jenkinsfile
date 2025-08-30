@@ -1,0 +1,26 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Build') {
+            agent {
+                docker { image 'maven:3.8.5-openjdk-17' }
+            }
+            steps {
+                sh 'mvn clean install'
+            }
+        }
+        stage('Build Image') {
+            steps {
+                script {
+                    docker.build('inventory-service', '.')
+                }
+            }
+        }
+        stage('Deploy') {
+            steps {
+                sh 'docker-compose -f ../docker-compose.yml up -d --build inventory-service'
+            }
+        }
+    }
+}

@@ -12,16 +12,51 @@ Ecom-Pulse mimics a basic e-commerce workflow, involving order creation, invento
 -   **Description:** Handles the creation and processing of customer orders.
 -   **Port:** `8080`
 -   **Key Functionality:** Receives order requests, interacts with the Inventory and Payment services to fulfill orders.
+-   **Swagger UI:** `http://localhost:8080/swagger-ui.html`
 
 ### 2. Inventory Service (`inventory-service`)
 -   **Description:** Manages product stock and reserves items for orders.
 -   **Port:** `8081`
 -   **Key Functionality:** Reserves inventory based on order requests.
+-   **Swagger UI:** `http://localhost:8081/swagger-ui.html`
 
 ### 3. Payment Service (`payment-service`)
 -   **Description:** Processes payments for orders.
 -   **Port:** `8082`
 -   **Key Functionality:** Simulates payment gateway interactions.
+-   **Swagger UI:** `http://localhost:8082/swagger-ui.html`
+
+## Swagger API Documentation
+
+All microservices in this project include Swagger UI for API documentation and testing. You can access the Swagger UI for each service at the following URLs:
+
+-   **Order Service:** `http://localhost:8080/swagger-ui.html`
+-   **Inventory Service:** `http://localhost:8081/swagger-ui.html`
+-   **Payment Service:** `http://localhost:8082/swagger-ui.html`
+
+## Chaos Simulation API
+
+To test the resilience and observability of the system, the `inventory-service` and `payment-service` include a Chaos Simulation API. This API allows you to simulate scenarios with increased latency and error rates.
+
+### How to Use
+
+You can enable and disable the chaos simulation by sending POST requests to the `/chaos/enable` and `/chaos/disable` endpoints on each service.
+
+**To enable a 500ms delay and a 20% error rate on the `inventory-service`:**
+```bash
+curl -X POST -H "Content-Type: application/json" \
+-d '{"latency": 500, "errorRate": 0.2}' \
+http://localhost:8081/chaos/enable
+```
+
+**To disable the simulation on the `inventory-service`:**
+```bash
+curl -X POST http://localhost:8081/chaos/disable
+```
+
+You can use the same commands for the `payment-service` by changing the port to `8082`.
+
+**Note:** You will need to rebuild the services for these changes to be available.
 
 ## Testing with JMeter
 
@@ -51,7 +86,7 @@ To get Ecom-Pulse up and running, ensure you have Docker and Docker Compose inst
     ```
 2.  **Build and start the services:**
     ```bash
-    docker-compose up --build -d
+    docker-compose -f ecom-pulse/docker-compose.yml up --build -d
     ```
     This command will:
     -   Build Docker images for all microservices.
@@ -64,6 +99,20 @@ To get Ecom-Pulse up and running, ensure you have Docker and Docker Compose inst
     -   Prometheus: `http://localhost:9090`
     -   Grafana: `http://localhost:3000`
 
+## CI/CD with Jenkins
+
+This project includes a `Jenkinsfile` to automate the build, test, and deployment of the application. The Jenkins setup is defined in the `jenkins-setup` directory.
+
+### Jenkins Setup
+
+The `jenkins-setup` directory contains:
+-   `Jenkinsfile`: The Jenkins pipeline definition.
+-   `jenkins.yaml`: A configuration file for Jenkins Configuration as Code (JCasC), which automatically creates the pipeline job in Jenkins.
+
+### Running Jenkins
+
+You can start a pre-configured Jenkins instance using the `azure-deploy.sh` script, or by running Jenkins in Docker and pointing it to the `jenkins.yaml` file.
+
 ## Deployment to AWS EC2 using Cloud-Init
 
 For automated deployment to an AWS EC2 instance, you can leverage Cloud-Init with the provided `cloud-init-deploy.sh` script. This script automates the installation of Docker and Docker Compose, clones the repository, and starts the services.
@@ -71,25 +120,32 @@ For automated deployment to an AWS EC2 instance, you can leverage Cloud-Init wit
 **How to use `cloud-init-deploy.sh`:**
 
 1.  **Launch an EC2 Instance:**
-    *   Choose an **Amazon Linux 2 AMI** (or a compatible Linux distribution where `yum` and `sudo` commands work as expected).
+    *   Choose an **Amazon Linux 2 AMI**.
     *   In the "Configure Instance Details" step, expand "Advanced Details".
     *   Paste the entire content of `cloud-init-deploy.sh` into the "User data" text area.
 2.  **Configure Security Group:**
-    *   Ensure your EC2 instance's security group allows inbound traffic on the following ports:
-        *   `22` (SSH)
-        *   `8080`, `8081`, `8082` (Microservices)
-        *   `9090` (Prometheus)
-        *   `3000` (Grafana)
-3.  **Launch and Monitor:**
-    *   Launch the instance. Cloud-Init will execute the script on first boot.
-    *   Monitor the instance's system logs (via EC2 console) to track the script's progress.
-    *   Once the script completes, your services should be running and accessible via the instance's public IP on the configured ports.
+    *   Ensure your EC2 instance's security group allows inbound traffic on the required ports.
 
-**Important Considerations:**
+## Deployment to Azure using cloud-init
 
-*   **IAM Role:** For enhanced security, consider attaching an IAM role to your EC2 instance with minimal necessary permissions, rather than relying on SSH keys for Git cloning if your repository were private.
-*   **`docker-compose` Version:** The script installs Docker Compose version `1.29.2`. You might want to update this to the latest stable version by changing the URL in the script.
-*   **User:** The script assumes the default user is `ec2-user` for adding to the `docker` group. Adjust `usermod -a -G docker ec2-user` if your AMI uses a different default user.
+For automated deployment to an Azure VM, you can use the provided scripts.
 
+### Deploying the Application (`azure-deploy-app.sh`)
 
+The `azure-deploy-app.sh` script automates the deployment of the Ecom-Pulse application on a Debian/Ubuntu-based Azure VM.
 
+**How to use `azure-deploy-app.sh`:**
+
+1.  **Create a new Linux Azure VM.**
+2.  In the "Advanced" tab, paste the content of `azure-deploy-app.sh` into the "User data" text area.
+3.  Configure the network security group to allow inbound traffic on the application ports.
+
+### Deploying Jenkins (`azure-deploy.sh`)
+
+The `azure-deploy.sh` script automates the setup of a pre-configured Jenkins instance on a Debian/Ubuntu-based Azure VM.
+
+**How to use `azure-deploy.sh`:**
+
+1.  **Create a new Linux Azure VM.**
+2.  In the "Advanced" tab, paste the content of `azure-deploy.sh` into the "User data" text area.
+3.  Configure the network security group to allow inbound traffic on port `8080` for the Jenkins UI.
