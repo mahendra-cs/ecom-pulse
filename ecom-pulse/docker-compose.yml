@@ -11,6 +11,11 @@ services:
       interval: 10s
       timeout: 10s
       retries: 10
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
 
   payment-service:
     build: ./payment-service
@@ -23,6 +28,11 @@ services:
       interval: 10s
       timeout: 10s
       retries: 10
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
 
   inventory-service:
     build: ./inventory-service
@@ -35,6 +45,11 @@ services:
       interval: 10s
       timeout: 10s
       retries: 10
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
 
   jmeter:
     build: ./jmeter
@@ -49,6 +64,11 @@ services:
         condition: service_healthy
       inventory-service:
         condition: service_healthy
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
 
   jmeter-starter:
     build: ./jmeter-starter
@@ -56,7 +76,8 @@ services:
       - "5001:5001"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - ./:/app
+      - ./jmeter-starter:/app
+      - ./jmeter:/jmeter
     working_dir: /app
     networks:
       - ecom-pulse-network
@@ -64,6 +85,11 @@ services:
       - order-service
       - payment-service
       - inventory-service
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
 
   prometheus:
     image: prom/prometheus:latest
@@ -74,17 +100,47 @@ services:
       - "9090:9090"
     networks:
       - ecom-pulse-network
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
 
   grafana:
     image: grafana/grafana:latest
     volumes:
       - ./grafana/provisioning:/etc/grafana/provisioning
+    command: /bin/sh -c "mkdir -p /etc/grafana/provisioning/dashboards && /run.sh"
     ports:
       - "3000:3000"
     networks:
       - ecom-pulse-network
     depends_on:
       - prometheus
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+  
+  loki:
+    image: grafana/loki:latest
+    ports:
+      - "3100:3100"
+    volumes:
+      - ./loki-config.yaml:/etc/loki/local-config.yaml
+    command: -config.file=/etc/loki/local-config.yaml
+    networks:
+      - ecom-pulse-network
+
+  promtail:
+    image: grafana/promtail:latest
+    volumes:
+      - ./promtail-config.yaml:/etc/promtail/config.yml
+      - /var/lib/docker/containers:/var/lib/docker/containers
+    command: -config.file=/etc/promtail/config.yml
+    networks:
+      - ecom-pulse-network
 
 networks:
   ecom-pulse-network:

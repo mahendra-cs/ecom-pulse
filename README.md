@@ -62,6 +62,48 @@ You can use the same commands for the `payment-service` by changing the port to 
 
 The project includes a JMeter test plan (`jmeter/create_order.jmx`) to simulate user traffic and generate requests to the microservices. This helps in creating a dynamic environment for collecting performance metrics and logs.
 
+## Running Load Tests with JMeter
+
+You can run a load test with a desired number of users by using the `jmeter-starter` service.
+
+### 1. Set the Number of Users
+
+To set the number of users for the load test, send a POST request to the `/set-users` endpoint with the desired number of users in the request body. For example, to set the number of users to 10, you can use the following `curl` command:
+
+```bash
+curl -X POST -H "Content-Type: application/json" \
+-d '{"num_users": 10}' \
+http://localhost:5001/set-users
+```
+
+### 2. Start the JMeter Test
+
+Once you have set the number of users, you can start the JMeter test by sending a POST request to the `/start-jmeter` endpoint:
+
+```bash
+curl -X POST http://localhost:5001/start-jmeter
+```
+
+This will trigger the JMeter test, and the results will be saved in the `jmeter/results` directory.
+
+### Using the `run-jmeter-test.sh` Script
+
+A convenient shell script `run-jmeter-test.sh` is provided to simplify the process of running a load test. This script takes the number of users as an argument, sets the number of users, and starts the JMeter test.
+
+**Usage:**
+
+```bash
+bash run-jmeter-test.sh <num_users>
+```
+
+**Example:**
+
+To run a load test with 20 users, you can use the following command:
+
+```bash
+bash run-jmeter-test.sh 20
+```
+
 ## Monitoring with Prometheus
 
 Prometheus is configured to scrape metrics from all microservices. These metrics provide real-time insights into the health and performance of each service, forming the basis for AI-driven anomaly detection.
@@ -74,6 +116,12 @@ Grafana is integrated to visualize the metrics collected by Prometheus. It provi
 
 -   **Grafana Dashboard:** Accessible at `http://localhost:3000`
     -   **Default Credentials:** `admin`/`admin` (you will be prompted to change the password on first login)
+
+## Logging with Loki
+
+Loki is a log aggregation system designed to store and query logs from all your applications and infrastructure. It is integrated with Grafana, allowing you to correlate metrics and logs in one place.
+
+-   **Loki:** Accessible via Grafana datasource
 
 ## How to Run the Project
 
@@ -93,6 +141,7 @@ To get Ecom-Pulse up and running, ensure you have Docker and Docker Compose inst
     -   Start the Order, Inventory, and Payment services.
     -   Start Prometheus for metrics collection.
     -   Start Grafana for metrics visualization.
+    -   Start Loki and Promtail for log aggregation.
     -   Start JMeter for traffic simulation.
 
 3.  **Access Dashboards:**
@@ -112,19 +161,6 @@ The `jenkins-setup` directory contains:
 ### Running Jenkins
 
 You can start a pre-configured Jenkins instance using the `azure-deploy.sh` script, or by running Jenkins in Docker and pointing it to the `jenkins.yaml` file.
-
-## Deployment to AWS EC2 using Cloud-Init
-
-For automated deployment to an AWS EC2 instance, you can leverage Cloud-Init with the provided `cloud-init-deploy.sh` script. This script automates the installation of Docker and Docker Compose, clones the repository, and starts the services.
-
-**How to use `cloud-init-deploy.sh`:**
-
-1.  **Launch an EC2 Instance:**
-    *   Choose an **Amazon Linux 2 AMI**.
-    *   In the "Configure Instance Details" step, expand "Advanced Details".
-    *   Paste the entire content of `cloud-init-deploy.sh` into the "User data" text area.
-2.  **Configure Security Group:**
-    *   Ensure your EC2 instance's security group allows inbound traffic on the required ports.
 
 ## Deployment to Azure using cloud-init
 
