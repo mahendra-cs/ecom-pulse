@@ -2,6 +2,8 @@ package com.ecompulse.payment;
 
 import io.micrometer.core.instrument.MeterRegistry;
 import io.micrometer.core.instrument.Timer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -10,6 +12,7 @@ import java.util.Map;
 @Service
 public class PaymentService {
 
+    private static final Logger log = LoggerFactory.getLogger(PaymentService.class);
     private final RestTemplate restTemplate;
     private final Timer paymentTimer;
 
@@ -24,6 +27,8 @@ public class PaymentService {
         return paymentTimer.record(() -> {
             try {
                 // In a real app, you'd call a payment gateway here
+                log.error("Payment service called");
+                System.out.println("Payment service called!");
                 return true;
             } catch (Exception e) {
                 return false;
