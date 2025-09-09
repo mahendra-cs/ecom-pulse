@@ -14,9 +14,12 @@ sudo chmod +x /usr/local/bin/docker-compose
 # Clone the repository
 git clone https://github.com/mahendra-cs/ecom-pulse.git /home/$USER/ecom-pulse
 
+# Build the custom Jenkins image
+docker build -t custom-jenkins-casc /home/$USER/ecom-pulse/jenkins-setup
+
 # Start Jenkins with JCasC
 docker run -d -p 8080:8080 -p 50000:50000 \
 -v /home/$USER/ecom-pulse/jenkins-setup/jenkins.yaml:/var/jenkins_home/casc_configs/jenkins.yaml \
 -v /var/run/docker.sock:/var/run/docker.sock \
 --name jenkins \
-jenkinsci/casc-jenkins:lts
+custom-jenkins-casc
