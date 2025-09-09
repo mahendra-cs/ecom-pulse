@@ -17,6 +17,10 @@ git clone https://github.com/mahendra-cs/ecom-pulse.git /home/$USER/ecom-pulse
 # Build the custom Jenkins image
 docker build -t custom-jenkins-casc /home/$USER/ecom-pulse/jenkins-setup
 
+# Stop and remove any existing Jenkins container to avoid conflicts
+docker stop jenkins || true
+docker rm jenkins || true
+
 # Start Jenkins with JCasC
 docker run -d -p 8080:8080 -p 50000:50000 \
 -v /home/$USER/ecom-pulse/jenkins-setup/jenkins.yaml:/var/jenkins_home/casc_configs/jenkins.yaml \
