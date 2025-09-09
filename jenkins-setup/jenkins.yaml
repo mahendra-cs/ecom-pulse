@@ -1,8 +1,14 @@
 jenkins:
-  systemMessage: "Jenkins configured automatically by JCasC"
+  systemMessage: "Jenkins configured automatically by JCasC to build and deploy to Azure"
   jobs:
     - script: >
-        pipelineJob('order-service-pipeline') {
+        pipelineJob('order-service-azure-pipeline') {
+          parameters {
+            string(name: 'SERVICE_NAME', defaultValue: 'order-service', description: 'Name of the service to build and deploy')
+            string(name: 'ACR_NAME', defaultValue: 'YOUR_ACR_NAME', description: 'Name of the Azure Container Registry')
+            string(name: 'APP_SERVICE_NAME', defaultValue: 'YOUR_APP_SERVICE_NAME', description: 'Name of the Azure App Service')
+            string(name: 'RESOURCE_GROUP', defaultValue: 'YOUR_RESOURCE_GROUP', description: 'Name of the Azure resource group')
+          }
           definition {
             cpsScm {
               scm {
@@ -13,12 +19,18 @@ jenkins:
                   branch('*/main')
                 }
               }
-              scriptPath('ecom-pulse/order-service/Jenkinsfile')
+              scriptPath('Jenkinsfile.azure-deploy')
             }
           }
         }
     - script: >
-        pipelineJob('inventory-service-pipeline') {
+        pipelineJob('inventory-service-azure-pipeline') {
+          parameters {
+            string(name: 'SERVICE_NAME', defaultValue: 'inventory-service', description: 'Name of the service to build and deploy')
+            string(name: 'ACR_NAME', defaultValue: 'YOUR_ACR_NAME', description: 'Name of the Azure Container Registry')
+            string(name: 'APP_SERVICE_NAME', defaultValue: 'YOUR_APP_SERVICE_NAME', description: 'Name of the Azure App Service')
+            string(name: 'RESOURCE_GROUP', defaultValue: 'YOUR_RESOURCE_GROUP', description: 'Name of the Azure resource group')
+          }
           definition {
             cpsScm {
               scm {
@@ -29,12 +41,18 @@ jenkins:
                   branch('*/main')
                 }
               }
-              scriptPath('ecom-pulse/inventory-service/Jenkinsfile')
+              scriptPath('Jenkinsfile.azure-deploy')
             }
           }
         }
     - script: >
-        pipelineJob('payment-service-pipeline') {
+        pipelineJob('payment-service-azure-pipeline') {
+          parameters {
+            string(name: 'SERVICE_NAME', defaultValue: 'payment-service', description: 'Name of the service to build and deploy')
+            string(name: 'ACR_NAME', defaultValue: 'YOUR_ACR_NAME', description: 'Name of the Azure Container Registry')
+            string(name: 'APP_SERVICE_NAME', defaultValue: 'YOUR_APP_SERVICE_NAME', description: 'Name of the Azure App Service')
+            string(name: 'RESOURCE_GROUP', defaultValue: 'YOUR_RESOURCE_GROUP', description: 'Name of the Azure resource group')
+          }
           definition {
             cpsScm {
               scm {
@@ -45,7 +63,7 @@ jenkins:
                   branch('*/main')
                 }
               }
-              scriptPath('ecom-pulse/payment-service/Jenkinsfile')
+              scriptPath('Jenkinsfile.azure-deploy')
             }
           }
         }
