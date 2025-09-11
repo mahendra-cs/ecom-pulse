@@ -3,11 +3,11 @@ services:
   order-service:
     build: ./order-service
     ports:
-      - "8080:8080"
+      - "8083:8083"
     networks:
       - ecom-pulse-network
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8080/actuator/health"]
+      test: ["CMD", "curl", "-f", "http://localhost:8083/actuator/health"]
       interval: 10s
       timeout: 10s
       retries: 10

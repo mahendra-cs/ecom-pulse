@@ -1,5 +1,5 @@
 server:
-  port: 8080  # Change to 8081 for inventory-service, 8082 for payment-service
+  port: 8083  # Change to 8081 for inventory-service, 8082 for payment-service
 
 spring:
   application:
