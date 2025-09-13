@@ -1,2 +1,17 @@
 server:
   port: 8081
+
+spring:
+  application:
+    name: inventory-service
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info, prometheus
+
+  metrics:
+    export:
+      prometheus:
+        enabled: true
