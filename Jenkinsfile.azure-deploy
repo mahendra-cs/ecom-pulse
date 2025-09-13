@@ -26,32 +26,17 @@ pipeline {
             }
         }
 
-        stage('Login to ACR') {
+        stage('Login, Push, and Deploy to Azure') {
             steps {
                 script {
-                    // Ensure Azure credentials are configured in Jenkins (e.g., Service Principal)
-                    // This assumes you have Azure credentials configured in Jenkins
-                    // For example, using 'withAzureCredentials' or 'az acr login' with service principal
-                    sh "az acr login --name ${params.ACR_NAME}"
-                }
-            }
-        }
-
-        stage('Push Docker Image to ACR') {
-            steps {
-                script {
-                    sh "docker push ${params.ACR_NAME}.azurecr.io/${params.SERVICE_NAME}:${env.BUILD_NUMBER}"
-                }
-            }
-        }
-
-        stage('Deploy to Azure App Service') {
-            steps {
-                script {
-                    // Deploy the Docker image to Azure App Service
-                    // Ensure Azure CLI is installed on the Jenkins agent
-                    sh "az webapp config container set --name ${params.APP_SERVICE_NAME} --resource-group ${params.RESOURCE_GROUP} --docker-custom-image-name ${params.ACR_NAME}.azurecr.io/${params.SERVICE_NAME}:${env.BUILD_NUMBER} --docker-registry-server-url https://${params.ACR_NAME}.azurecr.io"
-                    sh "az webapp restart --name ${params.APP_SERVICE_NAME} --resource-group ${params.RESOURCE_GROUP}"
+                    // The withAzure block will handle authentication using the credential you created.
+                    // Make sure to replace 'my-azure-sp' with the actual ID of your credential.
+                    withAzure(credentialsId: 'my-azure-sp') {
+                        sh "az acr login --name ${params.ACR_NAME}"
+                        sh "docker push ${params.ACR_NAME}.azurecr.io/${params.SERVICE_NAME}:${env.BUILD_NUMBER}"
+                        sh "az webapp config container set --name ${params.APP_SERVICE_NAME} --resource-group ${params.RESOURCE_GROUP} --docker-custom-image-name ${params.ACR_NAME}.azurecr.io/${params.SERVICE_NAME}:${env.BUILD_NUMBER} --docker-registry-server-url https://${params.ACR_NAME}.azurecr.io"
+                        sh "az webapp restart --name ${params.APP_SERVICE_NAME} --resource-group ${params.RESOURCE_GROUP}"
+                    }
                 }
             }
         }
