@@ -22,7 +22,7 @@ public class OrderService {
     public boolean processOrder(Map<String, Object> order) {
         return orderTimer.record(() -> {
             try {
-                restTemplate.postForEntity("http://localhost:8081/inventory/reserve", order, String.class);
+                restTemplate.postForEntity("http://inventory-service:8081/inventory/reserve", order, String.class);
                 return true;
             } catch (Exception e) {
                 return false;

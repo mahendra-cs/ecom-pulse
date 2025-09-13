@@ -24,7 +24,7 @@ public class InventoryService {
         return inventoryTimer.record(() -> {
             try {
                 // In a real app, you'd interact with a database here
-                restTemplate.postForEntity("http://localhost:8082/payment/pay", order, String.class);
+                restTemplate.postForEntity("http://payment-service:8082/payment/pay", order, String.class);
                 return true;
             } catch (Exception e) {
                 return false;
