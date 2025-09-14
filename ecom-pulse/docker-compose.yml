@@ -74,10 +74,10 @@ services:
     build: ./jmeter-starter
     ports:
       - "5001:5001"
-    # volumes:
-    #   - /var/run/docker.sock:/var/run/docker.sock
-    #   - ./jmeter-starter:/app
-    #   - ./jmeter:/jmeter
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./jmeter-starter:/app
+      - ./jmeter:/jmeter
     working_dir: /app
     networks:
       - ecom-pulse-network
