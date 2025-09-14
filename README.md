@@ -64,27 +64,61 @@ The project includes a JMeter test plan (`jmeter/create_order.jmx`) to simulate 
 
 ## Running Load Tests with JMeter
 
-You can run a load test with a desired number of users by using the `jmeter-starter` service.
+The `jmeter-starter` service provides an API to control and execute JMeter load tests. The tests will run continuously until explicitly stopped.
 
-### 1. Set the Number of Users
+### API Endpoints
 
-To set the number of users for the load test, send a POST request to the `/set-users` endpoint with the desired number of users in the request body. For example, to set the number of users to 10, you can use the following `curl` command:
+The `jmeter-starter` API is accessible at `http://localhost:5001`.
 
+#### 1. Set the Number of Users
+
+Sets the number of concurrent users (threads) for the JMeter test.
+
+*   **Endpoint:** `POST /set-users`
+*   **Request Body:** `{"num_users": <integer>}`
+
+**Example:**
 ```bash
 curl -X POST -H "Content-Type: application/json" \
 -d '{"num_users": 10}' \
 http://localhost:5001/set-users
 ```
 
-### 2. Start the JMeter Test
+#### 2. Set Throughput (Users per Second)
 
-Once you have set the number of users, you can start the JMeter test by sending a POST request to the `/start-jmeter` endpoint:
+Sets the target throughput for the JMeter test in users per second.
 
+*   **Endpoint:** `POST /set-throughput`
+*   **Request Body:** `{"users_per_second": <number>}`
+
+**Example:**
+```bash
+curl -X POST -H "Content-Type: application/json" \
+-d '{"users_per_second": 5}' \
+http://localhost:5001/set-throughput
+```
+
+#### 3. Start the JMeter Test
+
+Starts the JMeter test in the background. The test will run continuously until stopped.
+
+*   **Endpoint:** `POST /start-jmeter`
+
+**Example:**
 ```bash
 curl -X POST http://localhost:5001/start-jmeter
 ```
 
-This will trigger the JMeter test, and the results will be saved in the `jmeter/results` directory.
+#### 4. Stop the JMeter Test
+
+Stops any currently running JMeter test.
+
+*   **Endpoint:** `POST /stop-jmeter`
+
+**Example:**
+```bash
+curl -X POST http://localhost:5001/stop-jmeter
+```
 
 ### Using the `run-jmeter-test.sh` Script
 

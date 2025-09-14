@@ -3,13 +3,40 @@ import subprocess
 import re
 import os
 import signal
+from flasgger import Swagger
 
 app = Flask(__name__)
+swagger = Swagger(app) # Initialize Swagger
 
 jmeter_process = None # Global variable to store the JMeter process
 
 @app.route('/set-throughput', methods=['POST'])
 def set_throughput():
+    """
+    Set the target throughput for the JMeter test.
+    This will update the ConstantThroughputTimer in create_order.jmx.
+    ---
+    parameters:
+      - name: body
+        in: body
+        required: true
+        schema:
+          type: object
+          required:
+            - users_per_second
+          properties:
+            users_per_second:
+              type: number
+              description: Target throughput in users per second.
+              example: 5
+    responses:
+      200:
+        description: Throughput set successfully.
+      400:
+        description: Invalid input.
+      500:
+        description: An unexpected error occurred.
+    """
     try:
         data = request.get_json()
         users_per_second = data.get('users_per_second')
@@ -40,6 +67,18 @@ def set_throughput():
 
 @app.route('/start-jmeter', methods=['POST'])
 def start_jmeter():
+    """
+    Start the JMeter test in the background.
+    The test will run continuously until explicitly stopped.
+    ---
+    responses:
+      200:
+        description: JMeter test started successfully in background.
+      409:
+        description: JMeter test is already running.
+      500:
+        description: An unexpected error occurred.
+    """
     global jmeter_process
     if jmeter_process and jmeter_process.poll() is None:
         return jsonify({'message': 'JMeter test is already running'}), 409
@@ -59,6 +98,17 @@ def start_jmeter():
 
 @app.route('/stop-jmeter', methods=['POST'])
 def stop_jmeter():
+    """
+    Stop any currently running JMeter test.
+    ---
+    responses:
+      200:
+        description: JMeter test stopped successfully.
+      404:
+        description: No JMeter test is currently running.
+      500:
+        description: An unexpected error occurred.
+    """
     global jmeter_process
     if jmeter_process and jmeter_process.poll() is None:
         try:
@@ -73,6 +123,31 @@ def stop_jmeter():
 
 @app.route('/set-users', methods=['POST'])
 def set_users():
+    """
+    Set the number of concurrent users (threads) for the JMeter test.
+    This will update the ThreadGroup.num_threads in create_order.jmx.
+    ---
+    parameters:
+      - name: body
+        in: body
+        required: true
+        schema:
+          type: object
+          required:
+            - num_users
+          properties:
+            num_users:
+              type: integer
+              description: Number of concurrent users.
+              example: 10
+    responses:
+      200:
+        description: Number of users set successfully.
+      400:
+        description: Invalid input.
+      500:
+        description: An unexpected error occurred.
+    """
     try:
         data = request.get_json()
         num_users = data.get('num_users')
