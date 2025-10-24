@@ -10,9 +10,9 @@ Ecom-Pulse mimics a basic e-commerce workflow, involving order creation, invento
 
 ### 1. Order Service (`order-service`)
 -   **Description:** Handles the creation and processing of customer orders.
--   **Port:** `8080`
+-   **Port:** `8083`
 -   **Key Functionality:** Receives order requests, interacts with the Inventory and Payment services to fulfill orders.
--   **Swagger UI:** `http://localhost:8080/swagger-ui.html`
+-   **Swagger UI:** `http://localhost:8083/swagger-ui.html`
 
 ### 2. Inventory Service (`inventory-service`)
 -   **Description:** Manages product stock and reserves items for orders.
@@ -30,7 +30,7 @@ Ecom-Pulse mimics a basic e-commerce workflow, involving order creation, invento
 
 All microservices in this project include Swagger UI for API documentation and testing. You can access the Swagger UI for each service at the following URLs:
 
--   **Order Service:** `http://localhost:8080/swagger-ui.html`
+-   **Order Service:** `http://localhost:8083/swagger-ui.html`
 -   **Inventory Service:** `http://localhost:8081/swagger-ui.html`
 -   **Payment Service:** `http://localhost:8082/swagger-ui.html`
 
