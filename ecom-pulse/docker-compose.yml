@@ -110,6 +110,8 @@ services:
     image: grafana/grafana:latest
     volumes:
       - ./grafana/provisioning:/etc/grafana/provisioning
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
     command: /bin/sh -c "mkdir -p /etc/grafana/provisioning/dashboards && /run.sh"
     ports:
       - "3000:3000"
