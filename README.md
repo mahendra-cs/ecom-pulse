@@ -138,24 +138,40 @@ To run a load test with 20 users, you can use the following command:
 bash run-jmeter-test.sh 20
 ```
 
-## Monitoring with Prometheus
+## Monitoring and Logging
 
-Prometheus is configured to scrape metrics from all microservices. These metrics provide real-time insights into the health and performance of each service, forming the basis for AI-driven anomaly detection.
+The Ecom-Pulse application includes a comprehensive monitoring and logging stack, providing deep insights into the health and performance of the microservices. This stack is built on industry-standard tools: Prometheus, Grafana, Loki, and Promtail.
+
+### Monitoring with Prometheus
+
+Prometheus is a powerful open-source monitoring and alerting toolkit that collects and stores its metrics as time series data. It is configured to scrape metrics from all microservices, which are exposed via the Spring Boot Actuator.
 
 -   **Prometheus Dashboard:** Accessible at `http://localhost:9090`
 
-## Visualization with Grafana
+### Log Aggregation with Loki and Promtail
 
-Grafana is integrated to visualize the metrics collected by Prometheus. It provides dashboards for monitoring service performance, identifying trends, and pinpointing potential issues.
+Loki is a horizontally scalable, highly available, multi-tenant log aggregation system inspired by Prometheus. It is designed to be very cost-effective and easy to operate.
+
+Promtail is the agent that ships logs from the local machine to the Loki instance. It is configured to discover and tail logs from all the Docker containers running on the host.
+
+The logging pipeline works as follows:
+1.  The microservices write logs to `stdout` and `stderr`.
+2.  The Docker logging driver captures these logs.
+3.  Promtail scrapes the logs from Docker, adds labels (such as the container name), and sends them to Loki.
+4.  Loki indexes the metadata (labels) and stores the compressed log data.
+
+### Visualization with Grafana
+
+Grafana is an open-source platform for monitoring and observability that allows you to query, visualize, alert on, and understand your metrics and logs no matter where they are stored.
+
+Grafana is pre-configured with two data sources:
+-   **Prometheus:** For visualizing the application metrics.
+-   **Loki:** For querying and visualizing the application logs.
+
+A pre-built dashboard is included to provide a unified view of both metrics and logs, allowing for easy correlation between them.
 
 -   **Grafana Dashboard:** Accessible at `http://localhost:3000`
     -   **Default Credentials:** `admin`/`admin` (you will be prompted to change the password on first login)
-
-## Logging with Loki
-
-Loki is a log aggregation system designed to store and query logs from all your applications and infrastructure. It is integrated with Grafana, allowing you to correlate metrics and logs in one place.
-
--   **Loki:** Accessible via Grafana datasource
 
 ## How to Run the Project
 
