@@ -7,6 +7,8 @@ spring:
   autoconfigure:
     exclude:
       - org.springframework.boot.actuate.autoconfigure.metrics.SystemMetricsAutoConfiguration
+      - org.springframework.boot.actuate.autoconfigure.tracing.otel.OtelAutoConfiguration
+      - org.springframework.boot.actuate.autoconfigure.tracing.zipkin.ZipkinAutoConfiguration
 
 management:
   endpoints:
