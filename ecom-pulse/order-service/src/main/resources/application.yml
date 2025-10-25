@@ -23,7 +23,7 @@ management:
 
 logging:
   level:
-    root: DEBUG
+    root: INFO
 
 # OpenTelemetry exporter configuration
 otel:
