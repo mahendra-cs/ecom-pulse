@@ -77,7 +77,6 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./jmeter-starter:/app
-      - ./jmeter:/jmeter
     working_dir: /app
     networks:
       - ecom-pulse-network
