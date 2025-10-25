@@ -1,4 +1,4 @@
-FROM openjdk:17-jdk-alpine
+FROM openjdk:17-jdk
 RUN apk add --no-cache curl
 VOLUME /tmp
 COPY target/inventory-service-0.0.1-SNAPSHOT.jar app.jar
