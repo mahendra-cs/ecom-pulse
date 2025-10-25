@@ -1,6 +1,6 @@
 FROM openjdk:17-jdk-alpine
 RUN apk add --no-cache curl
 VOLUME /tmp
-COPY target/payment-service-0.0.1-SNAPSHOT.jar app.jar
+COPY target/payment-service-00.1-SNAPSHOT.jar app.jar
 COPY src/main/resources/application.yml ./
-ENTRYPOINT ["java", "-jar", "/app.jar"]
+ENTRYPOINT ["java", "-Dspring.autoconfigure.exclude=org.springframework.boot.actuate.autoconfigure.metrics.SystemMetricsAutoConfiguration,org.springframework.boot.actuate.autoconfigure.tracing.otel.OtelAutoConfiguration,org.springframework.boot.actuate.autoconfigure.tracing.zipkin.ZipkinAutoConfiguration", "-jar", "/app.jar"]
