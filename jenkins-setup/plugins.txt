@@ -17,4 +17,3 @@ git-client
 workflow-cps
 greenballs
 simple-theme-plugin
-sonar-quality-gates

@@ -1,11 +1,6 @@
 pipeline {
     agent any
 
-    environment {
-        SONAR_QUBE_URL = "YOUR_SONARQUBE_URL"
-        SONAR_QUBE_TOKEN = "YOUR_SONARQUBE_TOKEN"
-    }
-
     stages {
         stage('Build') {
             steps {
@@ -36,13 +31,6 @@ pipeline {
                             sh 'mvn test'
                         }
                     }
-                }
-            }
-        }
-        stage('Code Quality') {
-            steps {
-                dir('ecom-pulse') {
-                    sh "mvn sonar:sonar -Dsonar.host.url=${SONAR_QUBE_URL} -Dsonar.login=${SONAR_QUBE_TOKEN}"
                 }
             }
         }
