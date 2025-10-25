@@ -1,4 +1,4 @@
-FROM openjdk:17-jdk-slim
+FROM openjdk:11-jdk-slim
 
 # Install JMeter
 RUN apt-get update && apt-get install -y curl unzip && \
