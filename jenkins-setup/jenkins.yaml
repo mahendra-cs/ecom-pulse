@@ -1,14 +1,8 @@
 jenkins:
-  systemMessage: "Jenkins configured automatically by JCasC to build and deploy to Azure"
+  systemMessage: "Jenkins configured automatically by JCasC to build and deploy to Azure. This file creates the necessary jobs to build and deploy the ecom-pulse application."
   jobs:
     - script: >
-        pipelineJob('order-service-azure-pipeline') {
-          parameters {
-            string(name: 'SERVICE_NAME', defaultValue: 'order-service', description: 'Name of the service to build and deploy')
-            string(name: 'ACR_NAME', defaultValue: 'YOUR_ACR_NAME', description: 'Name of the Azure Container Registry')
-            string(name: 'APP_SERVICE_NAME', defaultValue: 'YOUR_APP_SERVICE_NAME', description: 'Name of the Azure App Service')
-            string(name: 'RESOURCE_GROUP', defaultValue: 'YOUR_RESOURCE_GROUP', description: 'Name of the Azure resource group')
-          }
+        pipelineJob('ecom-pulse') {
           definition {
             cpsScm {
               scm {
@@ -19,51 +13,19 @@ jenkins:
                   branch('*/main')
                 }
               }
-              scriptPath('Jenkinsfile.azure-deploy')
+              scriptPath('Jenkinsfile')
             }
           }
         }
     - script: >
-        pipelineJob('inventory-service-azure-pipeline') {
-          parameters {
-            string(name: 'SERVICE_NAME', defaultValue: 'inventory-service', description: 'Name of the service to build and deploy')
-            string(name: 'ACR_NAME', defaultValue: 'YOUR_ACR_NAME', description: 'Name of the Azure Container Registry')
-            string(name: 'APP_SERVICE_NAME', defaultValue: 'YOUR_APP_SERVICE_NAME', description: 'Name of the Azure App Service')
-            string(name: 'RESOURCE_GROUP', defaultValue: 'YOUR_RESOURCE_GROUP', description: 'Name of the Azure resource group')
-          }
-          definition {
-            cpsScm {
-              scm {
-                git {
-                  remote {
-                    url('https://github.com/mahendra-cs/ecom-pulse.git')
-                  }
-                  branch('*/main')
+        job('create-microservice-pipelines') {
+            steps {
+                jobDsl {
+                    targets(
+                        'order-service/src/main/resources/pipelines.groovy',
+                        'inventory-service/src/main/resources/pipelines.groovy',
+                        'payment-service/src/main/resources/pipelines.groovy'
+                    )
                 }
-              }
-              scriptPath('Jenkinsfile.azure-deploy')
             }
-          }
-        }
-    - script: >
-        pipelineJob('payment-service-azure-pipeline') {
-          parameters {
-            string(name: 'SERVICE_NAME', defaultValue: 'payment-service', description: 'Name of the service to build and deploy')
-            string(name: 'ACR_NAME', defaultValue: 'YOUR_ACR_NAME', description: 'Name of the Azure Container Registry')
-            string(name: 'APP_SERVICE_NAME', defaultValue: 'YOUR_APP_SERVICE_NAME', description: 'Name of the Azure App Service')
-            string(name: 'RESOURCE_GROUP', defaultValue: 'YOUR_RESOURCE_GROUP', description: 'Name of the Azure resource group')
-          }
-          definition {
-            cpsScm {
-              scm {
-                git {
-                  remote {
-                    url('https://github.com/mahendra-cs/ecom-pulse.git')
-                  }
-                  branch('*/main')
-                }
-              }
-              scriptPath('Jenkinsfile.azure-deploy')
-            }
-          }
         }
