@@ -1,7 +1,7 @@
-FROM openjdk:17-jdk-alpine
+FROM openjdk:17-jdk-slim
 
 # Install JMeter
-RUN apk --no-cache add curl unzip && \
+RUN apt-get update && apt-get install -y curl unzip && \
     mkdir /jmeter && \
     cd /jmeter && \
     curl -L -o apache-jmeter.tgz https://archive.apache.org/dist/jmeter/binaries/apache-jmeter-5.4.1.tgz && \
