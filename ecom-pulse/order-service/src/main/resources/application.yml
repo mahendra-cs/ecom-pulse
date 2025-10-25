@@ -21,6 +21,10 @@ management:
       prometheus:
         enabled: true
 
+logging:
+  level:
+    root: DEBUG
+
 # OpenTelemetry exporter configuration
 otel:
   tracing:
