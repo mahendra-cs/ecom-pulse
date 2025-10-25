@@ -6,9 +6,8 @@ USER root
 # Install Maven
 RUN apt-get update && apt-get install -y maven
 
-# Install Docker Compose
-RUN apt-get update && apt-get install -y python3-pip
-RUN pip install docker-compose
+# Install Docker Compose (using apt for docker-compose-plugin)
+RUN apt-get update && apt-get install -y docker-compose-plugin
 
 # Install Docker client and add jenkins user to docker group
 RUN apt-get update && apt-get install -y docker.io
