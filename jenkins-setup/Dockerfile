@@ -6,6 +6,10 @@ USER root
 # Install Maven
 RUN apt-get update && apt-get install -y maven
 
+# Install Docker Compose
+RUN apt-get update && apt-get install -y python3-pip
+RUN pip install docker-compose
+
 # Switch back to jenkins user
 USER jenkins
 
