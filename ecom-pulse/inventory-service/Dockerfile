@@ -1,4 +1,4 @@
-FROM openjdk:17-jdk
+FROM openjdk:17-jdk-slim-buster
 RUN apt-get update && apt-get install -y curl
 VOLUME /tmp
 COPY target/inventory-service-0.0.1-SNAPSHOT.jar app.jar
