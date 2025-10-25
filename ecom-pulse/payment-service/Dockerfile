@@ -1,5 +1,5 @@
 FROM openjdk:17-jdk
-RUN apk add --no-cache curl
+RUN apt-get update && apt-get install -y curl
 VOLUME /tmp
 COPY target/payment-service-0.0.1-SNAPSHOT.jar app.jar
 COPY src/main/resources/application.yml ./
