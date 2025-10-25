@@ -71,7 +71,9 @@ services:
         max-file: "3"
 
   jmeter-starter:
-    build: ./jmeter-starter
+    build:
+      context: .
+      dockerfile: ./jmeter-starter/Dockerfile
     ports:
       - "5001:5001"
     volumes:
