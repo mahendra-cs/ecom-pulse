@@ -10,6 +10,10 @@ RUN apt-get update && apt-get install -y maven
 RUN apt-get update && apt-get install -y python3-pip
 RUN pip install docker-compose
 
+# Install Docker client and add jenkins user to docker group
+RUN apt-get update && apt-get install -y docker.io
+RUN usermod -aG docker jenkins
+
 # Switch back to jenkins user
 USER jenkins
 
