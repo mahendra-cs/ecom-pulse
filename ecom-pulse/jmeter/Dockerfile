@@ -15,4 +15,6 @@ ENV PATH="/jmeter/apache-jmeter-5.4.1/bin:${PATH}"
 COPY create_order.jmx /jmeter/
 
 # Run the JMeter test
-CMD ["jmeter", "-J-XX:-UseContainerSupport", "-n", "-t", "/jmeter/create_order.jmx", "-l", "/jmeter/results/results.jtl"]
+COPY run-jmeter.sh /jmeter/
+RUN chmod +x /jmeter/run-jmeter.sh
+CMD ["/jmeter/run-jmeter.sh"]
