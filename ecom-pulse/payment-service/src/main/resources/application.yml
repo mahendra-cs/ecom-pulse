@@ -4,6 +4,9 @@ server:
 spring:
   application:
     name: payment-service
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.actuate.autoconfigure.metrics.SystemMetricsAutoConfiguration
 
 management:
   endpoints:
