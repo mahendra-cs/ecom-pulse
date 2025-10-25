@@ -15,4 +15,4 @@ ENV PATH="/jmeter/apache-jmeter-5.4.1/bin:${PATH}"
 COPY create_order.jmx /jmeter/
 
 # Run the JMeter test
-CMD ["jmeter", "-n", "-t", "/jmeter/create_order.jmx", "-l", "/jmeter/results/results.jtl"]
+CMD ["jmeter", "-J-Dsun.nio.ch.bugLevel=", "-n", "-t", "/jmeter/create_order.jmx", "-l", "/jmeter/results/results.jtl"]
