@@ -91,18 +91,6 @@ services:
         max-size: "10m"
         max-file: "3"
 
-  zipkin:
-    image: openzipkin/zipkin
-    ports:
-      - "9411:9411"
-    networks:
-      - ecom-pulse-network
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "10m"
-        max-file: "3"
-
   prometheus:
     image: prom/prometheus:latest
     volumes:
