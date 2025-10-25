@@ -14,6 +14,9 @@ sudo chmod +x /usr/local/bin/docker-compose
 # Clone the repository
 git clone https://github.com/mahendra-cs/ecom-pulse.git
 
+# Pull latest changes
+cd ecom-pulse && git pull && cd ..
+
 # Navigate to the correct directory
 cd ecom-pulse/ecom-pulse
 

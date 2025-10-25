@@ -14,6 +14,9 @@ sudo chmod +x /usr/local/bin/docker-compose
 # Clone the repository
 git clone https://github.com/mahendra-cs/ecom-pulse.git /home/$USER/ecom-pulse
 
+# Pull latest changes
+cd /home/$USER/ecom-pulse && git pull && cd -
+
 # Build the custom Jenkins image
 docker build -t custom-jenkins-casc /home/$USER/ecom-pulse/jenkins-setup
 
