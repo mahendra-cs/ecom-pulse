@@ -12,7 +12,7 @@ ingester:
     final_sleep: 0s
   chunk_idle_period: 5m
   chunk_retain_period: 1m
-  max_transfer_retries: 0
+
 schema_config:
   configs:
     - from: 2020-10-24
@@ -27,8 +27,8 @@ storage_config:
     active_index_directory: /tmp/loki/boltdb-shipper-active
     cache_location: /tmp/loki/boltdb-shipper-cache
     cache_ttl: 24h
-    shared_store: filesystem
+
   filesystem:
     directory: /tmp/loki/chunks
 
-tenant_id: ecom-pulse
+
