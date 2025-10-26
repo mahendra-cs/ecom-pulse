@@ -22,5 +22,4 @@ scrape_configs:
           auto_extract_kubernetes_metadata: false
     relabel_configs:
       - source_labels: [__meta_docker_container_name]
-        regex: ".*_(.*)_.*"
         target_label: container
