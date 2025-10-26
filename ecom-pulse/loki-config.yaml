@@ -37,4 +37,3 @@ limits_config:
 
 compactor:
   working_directory: /tmp/loki/compactor
-  shared_store: filesystem
