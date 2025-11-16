@@ -1,4 +1,4 @@
-FROM eclipse-temurin:11-jdk-slim
+FROM eclipse-temurin:11-jdk
 
 # Install JMeter
 RUN apt-get update && apt-get install -y curl unzip && \
