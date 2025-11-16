@@ -27,10 +27,11 @@ public class PaymentService {
         return paymentTimer.record(() -> {
             try {
                 // In a real app, you'd call a payment gateway here
-                log.error("Payment service called");
+                log.info("Payment service called for order: {}", order);
                 System.out.println("Payment service called!");
                 return true;
             } catch (Exception e) {
+                log.error("Payment processing failed for order: {}. Error: {}", order, e.getMessage(), e);
                 return false;
             }
         });
