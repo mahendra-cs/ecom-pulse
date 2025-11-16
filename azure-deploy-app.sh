@@ -5,6 +5,10 @@ sudo apt-get update -y
 sudo apt-get install -y docker.io maven
 sudo systemctl start docker
 sudo systemctl enable docker
+
+# Install Loki Docker driver
+sudo docker plugin install grafana/loki-docker-driver:latest --alias loki --grant-all-permissions
+
 sudo usermod -aG docker $USER
 
 # Install Docker Compose
