@@ -3,7 +3,9 @@ package com.ecompulse.order;
 import io.micrometer.core.instrument.MeterRegistry;
 import io.micrometer.core.instrument.Timer;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
+
+import java.util.Map;
 
 @Slf4j
 public class OrderService {
@@ -17,7 +19,6 @@ public class OrderService {
                 .register(registry);
         this.restTemplate = restTemplate;
     }
-    curl -G "http://20.67.232.67:3100/loki/api/v1/query_range" --data-urlencode "query={job=\"dockerlogs\", container=\"ecom-pulse-order-service-1\"}"
     public boolean processOrder(Map<String, Object> order) {
         return orderTimer.record(() -> {
             try {
