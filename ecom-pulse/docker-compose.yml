@@ -12,10 +12,10 @@ services:
       timeout: 10s
       retries: 10
     logging:
-      driver: "json-file"
+      driver: loki
       options:
-        max-size: "10m"
-        max-file: "3"
+        loki-url: "http://localhost:3100/loki/api/v1/push"
+        loki-job-name: "order-service"
 
   payment-service:
     build: ./payment-service
@@ -29,10 +29,10 @@ services:
       timeout: 10s
       retries: 10
     logging:
-      driver: "json-file"
+      driver: loki
       options:
-        max-size: "10m"
-        max-file: "3"
+        loki-url: "http://localhost:3100/loki/api/v1/push"
+        loki-job-name: "payment-service"
 
   inventory-service:
     build: ./inventory-service
@@ -46,10 +46,10 @@ services:
       timeout: 10s
       retries: 10
     logging:
-      driver: "json-file"
+      driver: loki
       options:
-        max-size: "10m"
-        max-file: "3"
+        loki-url: "http://localhost:3100/loki/api/v1/push"
+        loki-job-name: "inventory-service"
 
   jmeter:
     build: ./jmeter
@@ -133,15 +133,6 @@ services:
     volumes:
       - ./loki-config.yaml:/etc/loki/local-config.yaml
     command: -config.file=/etc/loki/local-config.yaml
-    networks:
-      - ecom-pulse-network
-
-  promtail:
-    image: grafana/promtail:latest
-    volumes:
-      - ./promtail-config.yaml:/etc/promtail/config.yml
-      - /var/lib/docker/containers:/var/lib/docker/containers
-    command: -config.file=/etc/promtail/config.yml
     networks:
       - ecom-pulse-network
 
