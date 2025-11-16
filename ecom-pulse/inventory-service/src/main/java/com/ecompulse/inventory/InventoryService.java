@@ -3,11 +3,13 @@ package com.ecompulse.inventory;
 import io.micrometer.core.instrument.MeterRegistry;
 import io.micrometer.core.instrument.Timer;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Map;
 
 @Slf4j
+@Service
 public class InventoryService {
 
     private final RestTemplate restTemplate;
