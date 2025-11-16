@@ -51,24 +51,24 @@ services:
         loki-url: "http://localhost:3100/loki/api/v1/push"
         loki-job-name: "inventory-service"
 
-  jmeter:
-    build: ./jmeter
-    # volumes:
-    #   - ./jmeter/results:/jmeter/results
-    networks:
-      - ecom-pulse-network
-    depends_on:
-      order-service:
-        condition: service_healthy
-      payment-service:
-        condition: service_healthy
-      inventory-service:
-        condition: service_healthy
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "10m"
-        max-file: "3"
+  # jmeter:
+  #   build: ./jmeter
+  #   # volumes:
+  #   #   - ./jmeter/results:/jmeter/results
+  #   networks:
+  #     - ecom-pulse-network
+  #   depends_on:
+  #     order-service:
+  #       condition: service_healthy
+  #     payment-service:
+  #       condition: service_healthy
+  #     inventory-service:
+  #       condition: service_healthy
+  #   logging:
+  #     driver: "json-file"
+  #     options:
+  #       max-size: "10m"
+  #       max-file: "3"
 
   jmeter-starter:
     build:
