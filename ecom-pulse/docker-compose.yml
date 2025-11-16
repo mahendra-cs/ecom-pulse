@@ -15,7 +15,6 @@ services:
       driver: loki
       options:
         loki-url: "http://localhost:3100/loki/api/v1/push"
-        loki-job-name: "order-service"
 
   payment-service:
     build: ./payment-service
@@ -32,7 +31,6 @@ services:
       driver: loki
       options:
         loki-url: "http://localhost:3100/loki/api/v1/push"
-        loki-job-name: "payment-service"
 
   inventory-service:
     build: ./inventory-service
@@ -49,7 +47,6 @@ services:
       driver: loki
       options:
         loki-url: "http://localhost:3100/loki/api/v1/push"
-        loki-job-name: "inventory-service"
 
   # jmeter:
   #   build: ./jmeter
