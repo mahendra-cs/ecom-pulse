@@ -2,12 +2,10 @@ package com.ecompulse.inventory;
 
 import io.micrometer.core.instrument.MeterRegistry;
 import io.micrometer.core.instrument.Timer;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
-import java.util.Map;
-
-@Service
+@Slf4j
 public class InventoryService {
 
     private final RestTemplate restTemplate;
@@ -27,6 +25,7 @@ public class InventoryService {
                 restTemplate.postForEntity("http://payment-service:8082/payment/pay", order, String.class);
                 return true;
             } catch (Exception e) {
+                log.error("Failed to process payment for order {}: {}", order, e.getMessage(), e);
                 return false;
             }
         });
